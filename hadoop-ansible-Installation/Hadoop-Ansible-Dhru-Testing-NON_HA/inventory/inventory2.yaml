@@ -10,58 +10,58 @@ all:
       children:
         namenodes:
           hosts:
-            100.96.20.171:
-            100.96.20.172:
+            100.26.10.171:
+            100.26.10.172:
         datanodes:
           hosts:
-            100.96.20.170:
+            100.26.10.170:
         tasknodes:
           hosts:
-            100.96.20.169:
-            100.96.20.168:
+            100.26.10.169:
+            100.26.10.168:
     Hbase-cluster:  ## Same host count should be reflected in zookeeper group
       children:
         hmaster:
           hosts:
-            100.96.20.170:
+            100.26.10.170:
         hregion-server:
           hosts:
-            100.96.20.168:
-            100.96.20.169:
-            100.96.20.171:
+            100.26.10.168:
+            100.26.10.169:
+            100.26.10.171:
     Flink-cluster:  ## Same host count should be reflected in zookeeper group
       children:
         jobmanager:
           hosts:
-            100.96.20.168:
+            100.26.10.168:
         taskmanager:
           hosts:
-            100.96.20.170:
-            100.96.20.171:
+            100.26.10.170:
+            100.26.10.171:
     Hive:
       hosts:
-        100.96.20.171:
+        100.26.10.171:
     Zookeeper-cluster:
       hosts:
-        100.96.20.168:
-        100.96.20.169:
-        100.96.20.171:
-        100.96.20.170:
+        100.26.10.168:
+        100.26.10.169:
+        100.26.10.171:
+        100.26.10.170:
     Presto-cluster:
       children:
         presto-coordinator:
           hosts:
-            100.96.20.169:
+            100.26.10.169:
         presto-worker:
           hosts:
-            100.96.20.170:
-            100.96.20.171:
-            100.96.20.172:
-            100.96.20.168:
+            100.26.10.170:
+            100.26.10.171:
+            100.26.10.172:
+            100.26.10.168:
     Spark:
       hosts:
-        100.96.20.169:
+        100.26.10.169:
     Mysql:
       hosts:
-        100.96.20.170: ## IF you change Ip change global variable also
+        100.26.10.170: ## IF you change Ip change global variable also
 
