@@ -3,8 +3,8 @@ all:
   vars:
     ansible_connection: ssh
     ansible_port: 22
-    ansible_user: nhadmin
-    ansible_password: July@2023
+    ansible_user: dhru
+    ansible_password: July@2025
   children:
     Hadoop-cluster:
       children:

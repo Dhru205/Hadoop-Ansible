@@ -10,9 +10,9 @@ node_environment: production
 etc_host : auto
 
 ##s3 bucket creds
-aws_access_key: bcc981876d28f9c9da9a4582ba8a9457
-aws_secret_key: A9themAwzNmpOVdWvDNU211jnhDLkIrPcwuI9akp
-s3_url: https://nha2dels3texpleicstest.ipstorage.tatacommunications.com
+aws_access_key: access key
+aws_secret_key: secret key
+s3_url: s3url
 s3_bucket_name: hadoop
 
 
