@@ -9,5 +9,5 @@
       msg: "HBase is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
     when:
       - "'Hbase-cluster' in group_names"
-      - hbase_version_output.rc == 0
+      - hbase_version_output.rc == 0 
       - "'HBase' in hbase_version_output.stdout"
