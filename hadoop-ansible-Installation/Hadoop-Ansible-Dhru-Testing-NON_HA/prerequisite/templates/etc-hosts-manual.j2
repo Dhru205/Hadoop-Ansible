@@ -1,0 +1,9 @@
+{% for master_host in groups['namenodes'] %}
+{{ master_host }} master{{ loop.index }}
+{% endfor %}
+{% for data_host in groups['datanodes'] %}
+{{ data_host }} datanode{{ loop.index }}
+{% endfor %}
+{% for task_host in groups['tasknodes'] %}
+{{ task_host }} tasknode{{ loop.index }}
+{% endfor %}

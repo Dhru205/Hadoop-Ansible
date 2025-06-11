@@ -1,0 +1,28 @@
+---
+
+  - name: Reload the daemon
+    ansible.builtin.command: systemctl daemon-reload
+    become: true
+
+  - name: Start flink cluster
+    ansible.builtin.service:
+      name: "{{ flink_cluster_service }}"
+      state: started
+    when: "'jobmanager' in group_names"
+    become: true
+    register: flink_cluster_service_check
+  - debug:
+          var: flink_cluster_service_check
+    when: "'jobmanager' in group_names"
+
+  - name: Check the status of flink_cluster_service
+    ansible.builtin.command: systemctl status "{{ flink_cluster_service }}"
+    when: "'jobmanager' in group_names"
+    become: true
+    register: status_flink_service
+  - debug:
+          var: status_flink_service
+    when: "'jobmanager' in group_names"
+
+  - name: JPS command
+    ansible.builtin.command: jps

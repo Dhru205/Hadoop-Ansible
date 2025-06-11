@@ -1,0 +1,89 @@
+---
+# vars file for hadoop
+
+## Check-hadoop.yml
+
+hadoop_check: hadoop version
+
+## vars for ssh-operation.yaml
+ssh_src: ~/.ssh/id_rsa.pub
+ssh_dst_1: buffer/rhel-1-id_rsa.pub
+ssh_dst_2: buffer/rhel-2-id_rsa.pub
+authorized_user: "{{  user }}"
+tags_authorized: runcd
+config_path: files/config
+config_dest: .ssh/config
+permission_config: chmod 400 ~/.ssh/config
+
+
+## vars for download-unzip.yaml
+hadoop_source: hadoop-2.10.2.tar.gz
+
+
+## vars for config-copy.yaml
+create_datanode_dir: "{{ home_path }}DNHA"
+destination_path: "{{ home_path }}hadoop-2.10.2/etc/hadoop/"
+hadoop_role_template_folder: templates/configs_nha/*
+dfs_namenode_name_dir: "{{ home_path }}NHA"
+
+## vars for create-service.yaml
+namenode_service_path: templates/service_create/hadoop-namenode.service
+secondarynamenode_service_path: templates/service_create/hadoop-secondarynamenode.service
+resource_manager_service_path: templates/service_create/resource-manager.service
+datanode_service_path: templates/service_create/datanode.service
+nodemanager_service_path: templates/service_create/yarn-nodemanager.service
+service_created_destination: /etc/systemd/system/
+
+## vars for enbale-service.yaml
+service_namenode: hadoop-namenode.service
+service_secondarynamenode: hadoop-secondarynamenode.service
+resource_manager: resource-manager.service
+datanode_service: datanode.service
+yarn_nodemanager: yarn-nodemanager.service
+hadoop_home: "{{ home_path }}hadoop-2.10.2/"
+
+## vars for activate-service.yaml
+namenode_format_primary: hdfs namenode -format
+
+## vars for Node-lables.yaml
+node_list: yarn node --list
+add_cluster_nodelabels: yarn rmadmin -addToClusterNodeLabels "CORE,TASK"
+list_nodelabels: yarn cluster --list-node-labels
+node_label_shellscript_dest: "{{ home_path }}generated_script.sh"
+node_label_template_source: templates/yarn-label.j2
+
+
+## vars for all the properties used in hadoop
+
+##core-site.xml
+
+hadoop_tmp_dir_nha: "{{ home_path }}NHA/hadooptmpdata"
+
+##hdfs-site.xml
+
+dfs_datanode_data_dir: "{{ home_path }}DNHA"
+dfs_namenode_checkpoint_dir: "{{ home_path }}NHA"
+dfs_replication_nha: 2
+dfs_secondary_http_address_nha: "{{ secondary }}:50090"
+create_namenode_data_dir: "{{ home_path }}NHA"
+
+##mapred-site.xml
+mapreduce_application_classpath_nha: /etc/hadoop/hadoop-2.10.2
+
+##yarn-site.xml
+yarn_resourcemanager_hostname_nha: "{{ primary }}"
+yarn_nodemanager_aux_services_spark_shuffle_class_nha: $SPARK_HOME/yarn/spark-3.0.3-yarn-shuffle.jar
+yarn_resourcemanager_resource_tracker_address_nha: "{{ primary }}:8025"
+yarn_resourcemanager_scheduler_address_nha: "{{ primary }}:8030"
+yarn_resourcemanager_address_nha: "{{ primary }}:8040"
+yarn_node_labels_fs_store_root_dir_nha: "hdfs://{{ primary }}:9000/yarn/node-labels/"
+
+
+#pid files for hadoop services
+pid_namenode_file: "/tmp/hadoop-{{  user }}-namenode.pid"
+pid_secondarynamenode_file: "/tmp/hadoop-{{  user }}-secondarynamenode.pid"
+pid_resourcemanager_file: "/tmp/yarn-{{  user }}-resourcemanager.pid"
+pid_datanode_file: "/tmp/hadoop-{{  user }}-datanode.pid"
+pid_nodemanager_file: "/tmp/yarn-{{  user }}-nodemanager.pid"
+
+

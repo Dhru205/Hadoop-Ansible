@@ -1,0 +1,4 @@
+---
+  - ansible.builtin.include_tasks: 1-mysql.yml
+    when: enable_mysql_init_schema == true
+

@@ -1,0 +1,61 @@
+---
+  - name: Creating a presto data directory on master and slave
+    file:
+      path: "{{ presto_dir }}"
+      state: directory
+    when: "'Presto-cluster' in group_names"
+
+  - name: Creating a etc directory on master and slave
+    file:
+      path: "{{ etc_path }}"
+      state: directory
+    when: "'Presto-cluster' in group_names"
+
+  - name: Copy files from template folder to presto master etc directory
+    template:
+      src: "{{ item }}"
+      dest: "{{ destination_path }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ presto_role_master_template_folder }}"
+    when: "'presto-coordinator' in group_names"
+
+  - name: Copy files from template folder to presto slaves etc directory
+    template:
+      src: "{{ item }}"
+      dest: "{{ destination_path }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ presto_role_slaves_template_folder }}"
+    when: "'presto-worker' in group_names"    
+
+
+  - name: Creating a etc/catalog directory on master and slave
+    ansible.builtin.file:
+      path: "{{ catalog_path }}"
+      state: directory
+    when: "'Presto-cluster' in group_names"
+
+
+  - name: Copy files from template folder to presto slaves catalog directory
+    template:
+      src: "{{ item }}"
+      dest: "{{ catalog_dest }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ source_catalog_properties }}"
+    when: "'Presto-cluster' in group_names" 
+
+  - name: Generate new UUID for presto
+    shell: uuidgen
+    register: new_uuid_result
+  - debug:
+      var: new_uuid_result
+    when: "'Presto-cluster' in group_names"
+
+  - name: Add New UUID to node.properties
+    blockinfile:
+      dest: "{{ node_property }}"
+      insertafter: node.environment
+      block: |
+        node.id={{ new_uuid_result['stdout'] }}
+    when: "'Presto-cluster' in group_names"
+    register: filecontents
+  - debug: msg=”{{ filecontents }}”

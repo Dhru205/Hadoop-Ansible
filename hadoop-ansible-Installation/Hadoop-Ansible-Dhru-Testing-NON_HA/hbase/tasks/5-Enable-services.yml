@@ -1,0 +1,11 @@
+---
+  - name: Enable hbase service on primary and secondary
+    ansible.builtin.service:
+      name: "{{ hbase_service }}"
+      enabled: yes
+    when: inventory_hostname in groups['hmaster']
+    become: true 
+    register: enable_hbase_service   
+  - debug:
+          var: enable_hbase_service
+    when: inventory_hostname in groups['hmaster']

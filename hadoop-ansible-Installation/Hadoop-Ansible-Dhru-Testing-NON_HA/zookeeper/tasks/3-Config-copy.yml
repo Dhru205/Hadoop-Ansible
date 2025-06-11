@@ -1,0 +1,18 @@
+---
+  - name: copy the zoo.cfg to "{{ zoo_cfg_path }}" across all machines 
+    ansible.builtin.template:
+      src: "{{ source_zoo_cfg }}"
+      dest: "{{ zoo_cfg_path }}" 
+    when: "'Zookeeper-cluster' in group_names"  
+      
+  - name: Creating a zookeeper directory
+    file:
+      path: "{{ create_zoo_dir }}"
+      state: directory
+    when: "'Zookeeper-cluster' in group_names"  
+
+  - name: Create myid file
+    copy:
+      dest: "{{ myid_zookeeper_path }}"
+      content: "{{ ansible_play_hosts.index(inventory_hostname) + 1 }}"
+    when: "'Zookeeper-cluster' in group_names"  

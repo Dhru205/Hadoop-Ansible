@@ -1,0 +1,13 @@
+---
+  - name: Get Hadoop Version
+    ansible.builtin.command: "{{ hadoop_check }}"
+    register: hadoop_version_output
+    ignore_errors: True
+
+  - name: Stop Task Execution if Hadoop is Present
+    fail:
+      msg: "Hadoop is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Hadoop-cluster' in group_names"
+      - hadoop_version_output.rc == 0
+      - "'Hadoop' in hadoop_version_output.stdout"

@@ -1,0 +1,6 @@
+---
+# tasks file for prerequisite
+  - ansible.builtin.include_tasks: 0-etc-hosts.yml
+  - ansible.builtin.include_tasks: 1-open-jdk.yml
+  - ansible.builtin.include_tasks: 2-bashrc.yml
+  - ansible.builtin.include_tasks: 3-pip-boto3.yml

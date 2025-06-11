@@ -1,0 +1,67 @@
+---
+all:
+  vars:
+    ansible_connection: ssh
+    ansible_port: 22
+    ansible_user: nhadmin
+    ansible_password: August@2023
+  children:
+    Hadoop-cluster:
+      children:
+        namenodes:
+          hosts:
+            100.96.20.168:
+            100.96.20.169:
+        datanodes:
+          hosts:
+            100.96.20.170:
+            100.96.20.171:
+            100.96.20.172:
+        tasknodes:
+          hosts:
+            100.96.20.172:
+    Hbase-cluster:  ## Same host count should be reflected in zookeeper group
+      children:
+        hmaster:
+          hosts:
+            100.96.20.169:
+        hregion-server:
+          hosts:
+            100.96.20.170:
+            100.96.20.171:
+            100.96.20.172:
+    Flink-cluster:  ## Same host count should be reflected in zookeeper group
+      children:
+        jobmanager:
+          hosts:
+            100.96.20.168:
+        taskmanager:
+          hosts:
+            100.96.20.170:
+            100.96.20.172:
+    Hive:
+      hosts:
+        100.96.20.169:
+    Zookeeper-cluster:
+      hosts:
+        100.96.20.169:
+        100.96.20.170:
+        100.96.20.171:
+        100.96.20.172:
+    Presto-cluster:
+      children:
+        presto-coordinator:
+          hosts:
+            100.96.20.168:
+        presto-worker:
+          hosts:
+            100.96.20.170:
+            100.96.20.171:
+            100.96.20.172:
+    Spark:
+      hosts:
+        100.96.20.168:
+    Mysql:
+      hosts:
+        100.96.20.168: ## IF you change Ip change global variable also
+

@@ -1,0 +1,13 @@
+---
+# Check Linux version and install OpenJDK
+  - name: Install OpenJDK 8 on Ubuntu
+    apt:
+      name: openjdk-8-jdk
+      state: present
+    when: ansible_distribution == 'Ubuntu'
+
+  - name: Install OpenJDK 8 on RHEL/CentOS
+    yum:
+      name: java-1.8.0-openjdk
+      state: present
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'

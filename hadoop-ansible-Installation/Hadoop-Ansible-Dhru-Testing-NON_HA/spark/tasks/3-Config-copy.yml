@@ -1,0 +1,17 @@
+---
+  - name: copy the spark-defaults.conf
+    ansible.builtin.template:
+      src: "{{ source_spark_conf }}"
+      dest: "{{ dest_spark_conf }}"
+    when: inventory_hostname in groups['Spark'] 
+
+  - name: copy the mysql-connector
+    become: true
+    ansible.builtin.copy:
+      src: "{{ mysql_conn }}"
+      dest: "{{ dest_mysql_jar }}"
+    when: inventory_hostname in groups['Spark']
+
+  - name: Create spark-logs folder
+    ansible.builtin.command: hdfs dfs -mkdir "{{ spark_eventLog_dir }}"
+    when: inventory_hostname in groups['Spark']    

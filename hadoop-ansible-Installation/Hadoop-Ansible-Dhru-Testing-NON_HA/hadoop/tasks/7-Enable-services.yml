@@ -1,0 +1,51 @@
+---
+
+#Enable namenode node service masters
+
+  - name: Enable service namenode on master
+    ansible.builtin.service:
+      name: "{{ service_namenode }}"
+      enabled: yes
+    when: inventory_hostname in groups['namenodes'][0] 
+    become: true  
+
+#Enable secondarynamenode node service masters
+
+  - name: Enable service namenode on secondary master
+    ansible.builtin.service:
+      name: "{{ service_secondarynamenode }}"
+      enabled: yes
+    when: inventory_hostname in groups['namenodes'][1] 
+    become: true  
+
+#Enable resourcemanager on master
+
+  - name: Enable service resource manager on primary
+    ansible.builtin.service:
+      name: "{{ resource_manager }}"
+      enabled: yes
+    when: inventory_hostname in groups['namenodes'][0] 
+    become: true
+
+#Enable datanode service on datanodes
+
+  - name: Enable service datanode on host datanodes
+    ansible.builtin.service:
+      name: "{{ datanode_service }}"
+      enabled: yes
+    when: "'datanodes' in group_names"
+    become: true  
+
+#Enable nodemanager service on tasknodes and datanodes
+
+  - name: Enable service nodemanager on tasknodes and datanodes
+    ansible.builtin.service:
+      name: "{{ yarn_nodemanager }}"
+      enabled: yes
+    when: "{{ item }}"
+    with_items:
+      - inventory_hostname in groups['datanodes']
+      - inventory_hostname in groups['tasknodes'] 
+    become: true 
+
+    

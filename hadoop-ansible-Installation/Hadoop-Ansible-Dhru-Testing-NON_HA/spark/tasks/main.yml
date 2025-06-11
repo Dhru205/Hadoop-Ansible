@@ -1,0 +1,4 @@
+---
+  - ansible.builtin.include_tasks: 1-Check-spark.yml
+  - ansible.builtin.include_tasks: 2-Download-unzip-bin.yml
+  - ansible.builtin.include_tasks: 3-Config-copy.yml   

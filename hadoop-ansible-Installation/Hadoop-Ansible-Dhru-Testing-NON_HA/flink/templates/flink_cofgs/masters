@@ -1,0 +1,5 @@
+{% for host in groups['jobmanager'] %}
+{{ hostvars[host]['ansible_hostname'] }}:8081
+{% endfor %}
+
+

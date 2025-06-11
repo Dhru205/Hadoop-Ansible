@@ -1,0 +1,18 @@
+---
+  - name: Copy hive tar from s3 bucket to primary node
+    aws_s3:
+      s3_url: "{{ s3_url }}"   
+      bucket: "{{ s3_bucket_name }}"
+      object: "{{ hive_source }}"
+      dest: "{{ home_path }}/{{ hive_source }}"
+      mode: get
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"          
+    when: "'Hive' in group_names" 
+
+  - name: Unzip hive on primary
+    ansible.builtin.unarchive:
+      src: "{{ hive_source }}"
+      dest: "{{ home_path }}"      
+      remote_src: yes 
+    when: "'Hive' in group_names" 

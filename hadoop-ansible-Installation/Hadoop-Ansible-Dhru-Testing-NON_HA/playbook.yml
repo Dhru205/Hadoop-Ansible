@@ -1,0 +1,21 @@
+
+---
+
+  - hosts: all
+    vars_files:
+      - ./vars/external_vars.yml
+      # - ./aws_creds.yml
+    roles:
+    #  - clean-up
+     - prerequisite
+     - hadoop
+    #  - mysql
+    #  - hive
+    #  - zookeeper
+    #  - flink
+    #  - hbase
+    #  - presto
+    #  - spark
+    #  - yarn-tuning
+
+

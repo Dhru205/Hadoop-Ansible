@@ -1,0 +1,13 @@
+---
+  - name: Get Presto Version
+    command: "{{ presto_check }}"
+    register: presto_version_output
+    ignore_errors: True
+
+  - name: Stop Task Execution if Presto is Present
+    fail:
+      msg: "Presto is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Presto-cluster' in group_names"
+      - presto_version_output.rc == 0
+      - "'Presto' in presto_version_output.stdout"

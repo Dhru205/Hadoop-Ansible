@@ -1,0 +1,11 @@
+---
+    # #hive-server2 service  on primary         
+  - name: Create hive server2 service on primary
+    template:  
+      src: "{{ hive_server_path }}"
+      dest: "{{ service_created_destination }}"
+    when: "'Hive' in group_names" 
+    become: true
+  - debug:
+          msg: hive-server2 service created on {{ inventory_hostname }} 
+    when: "'Hive' in group_names"   

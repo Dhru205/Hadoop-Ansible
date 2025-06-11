@@ -1,0 +1,12 @@
+---
+    # #Enable flink jobmanager service on primary
+  - name: Enable flink_cluster service on primary
+    ansible.builtin.service:
+      name: "{{ flink_cluster_service }}"
+      enabled: yes
+    when: "'jobmanager' in group_names"
+    become: true
+    register: enable_flink_jobmanager_service
+  - debug:
+          var: enable_flink_jobmanager_service
+    when: "'jobmanager' in group_names"

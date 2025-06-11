@@ -1,0 +1,14 @@
+---
+#Enable zookeeper service across all nodes
+
+  - name: Enable service zookeeper across all nodes
+    ansible.builtin.service:
+      name: "{{ zk_server }}"
+      enabled: yes
+    become: true
+    when: "'Zookeeper-cluster' in group_names"
+
+    register: enable_zookeeper_service   
+  - debug:
+          var: enable_zookeeper_service
+    when: "'Zookeeper-cluster' in group_names"           

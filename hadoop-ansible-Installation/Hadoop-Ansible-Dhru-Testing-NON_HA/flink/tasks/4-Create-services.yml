@@ -1,0 +1,11 @@
+---
+# Create flink jobmanager service on primary
+  - name: Create flink_cluster service on primary
+    template:
+      src: "{{ flink_cluster_path }}"
+      dest: "{{ service_created_destination }}"
+    when: "'jobmanager' in group_names"
+    become: true
+  - debug:
+          msg: flink service created on {{ inventory_hostname }}
+    when: "'jobmanager' in group_names"

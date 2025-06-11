@@ -1,0 +1,12 @@
+---
+    ##Enable hive server service on primary
+  - name: Enable hive server service on primary
+    ansible.builtin.service:
+      name: "{{ hive_server }}"
+      enabled: yes
+    when: "'Hive' in group_names"    
+    become: true
+    register: enable_hiveserver_primary_service   
+  - debug:
+          var: enable_hiveserver_primary_service
+    when: "'Hive' in group_names" 

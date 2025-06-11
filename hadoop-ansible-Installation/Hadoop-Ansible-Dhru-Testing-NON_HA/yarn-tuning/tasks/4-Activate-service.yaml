@@ -1,0 +1,28 @@
+---
+#Start resource manager on primary
+
+  - name: Block execution for resource manager on primary
+    block:
+      - name: Start service resource manager on primary
+        ansible.builtin.service:
+          name: "{{ resource_manager }}"
+          state: started
+        when: inventory_hostname in groups['namenodes'][0]
+        become: true
+        register: start_resourcemanager_primary_service
+      - debug:
+              var: start_resourcemanager_primary_service
+        when: inventory_hostname in groups['namenodes'][0]
+
+      - name: Sleep for {{ sleep_time }} seconds and continue with play
+        ansible.builtin.wait_for:
+          timeout: "{{ sleep_time }}"
+
+      - name: Check the status of resource manager service on primary
+        ansible.builtin.command: systemctl status "{{ resource_manager }}"
+        when: inventory_hostname in groups['namenodes'][0]
+        become: true
+        register: status_resource_manager1_service
+      - debug:
+              var: status_resource_manager1_service
+        when: inventory_hostname in groups['namenodes'][0]

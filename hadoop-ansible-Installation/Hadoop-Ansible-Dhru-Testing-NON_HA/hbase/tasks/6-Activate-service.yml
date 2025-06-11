@@ -1,0 +1,35 @@
+---
+#Reload Daemon 
+
+  - name: Reload the daemon 
+    ansible.builtin.command: systemctl daemon-reload
+    become: true
+
+##Start hbase on primary
+
+  - name: Start hbase service on primary
+    ansible.builtin.service:
+      name: "{{ hbase_service }}"
+      state: started
+    when: inventory_hostname in groups['hmaster']
+    become: true 
+    register: start_hbase_primary_service   
+  - debug:
+          var: start_hbase_primary_service  
+    when: inventory_hostname in groups['hmaster']         
+
+  - name: Check the status of hbase service on primary host 
+    ansible.builtin.command: systemctl status "{{ hbase_service }}"
+    when: inventory_hostname in groups['hmaster']
+    become: true    
+    register: status_hbase1_service    
+  - debug:
+          var: status_hbase1_service
+    when: inventory_hostname in groups['hmaster']    
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command_hbase_primary
+  - debug:
+          var: jps_command_hbase_primary  
+    when: inventory_hostname in groups['hmaster']   

@@ -1,0 +1,18 @@
+[Unit]
+Description=Start flink taskmanager service
+After=syslog.target network.target remote-fs.target nss-lookup.target network-online.target
+Requires=network-online.target
+[Service]
+User={{  user }}
+Group={{  user }}
+Type=forking
+ExecStart={{ flink_home }}bin/start taskmanager.sh
+ExecStop={{ flink_home }}bin/stop taskmanager.sh
+WorkingDirectory={{ flink_home }}
+Environment=JAVA_HOME={{ java_path }}
+Environment=FLINK_HOME={{ flink_home }}
+TimeoutStartSec=2min
+Restart=on-failure
+PIDFile={{ pid_flink_taskmanager_file }}
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+---
+
+  - name: Copy files from template folder
+    template:
+      src: "{{ item }}"
+      dest: "{{ destination_path }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ flink_role_template_folder }}"
+    when: "'Flink-cluster' in group_names"

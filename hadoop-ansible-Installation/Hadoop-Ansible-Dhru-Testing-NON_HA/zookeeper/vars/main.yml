@@ -1,0 +1,42 @@
+---
+# vars file for zookeeper
+
+#zookeepeer source file
+zookeeper_source: zookeeper-3.4.6.tar.gz
+
+#source-path for zoo.cfg
+source_zoo_cfg: templates/zoo.cfg
+
+#destination path for zoo.cfg
+zoo_cfg_path: "{{ home_path }}zookeeper-3.4.6/conf"
+
+#path for creating zookeeper directory across all machines
+create_zoo_dir: "{{ home_path }}NHA/data/zookeeper"
+zookeeper_check: zkServer.sh status
+
+#myid file 
+my_id_src: ./templates/myid.j2
+myid_zookeeper_path: "{{ home_path }}NHA/data/zookeeper/myid"
+
+
+#service confgs for zookeeper
+service_created_destination: /etc/systemd/system/
+zookeeper_service_path: templates/zk-server-sh.service
+zk_server: zk-server-sh.service
+pid_zkserver_file: "{{ home_path }}NHA/data/zookeeper/zookeeper_server.pid"
+hadoop_home: "{{ home_path }}hadoop-2.10.2/"
+zookeeper_home: "{{ home_path }}zookeeper-3.4.6/"
+
+#for zoo.cfg
+data_Dir: "{{ home_path }}NHA/data/zookeeper"
+client_Port: 2181
+
+zookeeper_binary: https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
+
+
+server_1: primary:2888:3888
+server_2: secondary:2888:3888
+server_3: datanode1:2888:3888
+server_4: tasknode1:2888:3888
+server_5: tasknode2:2888:3888
+

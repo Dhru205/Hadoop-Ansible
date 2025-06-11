@@ -1,0 +1,7 @@
+---
+# vars file for mysql
+ansible_hostname: "{{  user }}"
+mysql_repo: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+mysql_server: mysql-community-server
+mysqld_start: systemctl start mysqld
+mysql_check: mysql -V

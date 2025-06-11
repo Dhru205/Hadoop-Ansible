@@ -1,0 +1,25 @@
+---
+# vars file for prerequisite
+
+#Host file path
+hosts_file_path: /etc/hosts
+
+# bashrc
+path_bashrc: .bashrc
+java_home: export JAVA_HOME="{{ java_path }}"
+Hadoop_home: export HADOOP_HOME="{{ home_path }}hadoop-2.10.2"
+spark_home: export SPARK_HOME="{{ home_path }}spark-3.2.2-bin-hadoop2.7"
+hive_home: export HIVE_HOME="{{ home_path }}apache-hive-2.3.9-bin"
+presto_home: export PRESTO_HOME="{{ home_path }}presto-server-0.278.1"
+hbase_home: export HBASE_HOME="{{ home_path }}hbase-2.4.15"
+flink_home: export FLINK_HOME="{{ home_path }}flink-1.14.4"
+zookeeper_home: export ZOOKEEPER_HOME="{{ home_path }}zookeeper-3.4.6"
+hadoop_install: export HADOOP_INSTALL=$HADOOP_HOME
+hadoop_mapred: export HADOOP_MAPRED_HOME=$HADOOP_HOME
+hadoop_hdfs: export HADOOP_HDFS_HOME=$HADOOP_HOME
+hadoop_yarn: export YARN_HOME=$HADOOP_HOME
+hadoop_common_lib: export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+hadoop_conf: export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+hadoop_yarn_conf: export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+hadoop_opts: export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+all_path: export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$SPARK_HOME/bin:$HIVE_HOME/bin:$HBASE_HOME/bin:$FLINK_HOME/bin:$PRESTO_HOME/bin:$JAVA_HOME/bin:$ZOOKEEPER_HOME/bin

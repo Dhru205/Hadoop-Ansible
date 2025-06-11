@@ -1,0 +1,70 @@
+---
+# Disable service on all machines
+
+  # - name: disable service journalnode across all nodes
+  #   ansible.builtin.command: systemctl disable hadoop-journalnode.service  
+  #   become: true
+
+  - name: disable service hadoop-namenode on primary 
+    ansible.builtin.command: systemctl disable hadoop-namenode.service  
+    when: inventory_hostname in groups['namenodes'][0]    
+    become: true
+
+  - name: disable service hadoop-namenode on secondary
+    ansible.builtin.command: systemctl disable hadoop-secondarynamenode.service  
+    when: inventory_hostname in groups['namenodes'][1]    
+    become: true
+
+  # - name: disable service zookeeper
+  #   ansible.builtin.command: systemctl disable zk-server-sh.service 
+  #   become: true 
+  #   when: "'Zookeeper-cluster' in group_names"
+
+  # - name: disable service zkfc 
+  #   ansible.builtin.command: systemctl disable zkfc.service  
+  #   when: inventory_hostname in groups['masters']   
+  #   become: true
+
+  - name: disable service resourcemanager 
+    ansible.builtin.command: systemctl disable resource-manager.service  
+    when: inventory_hostname in groups['namenodes'][0]   
+    become: true
+
+  - name: disable service datanodes
+    ansible.builtin.command: systemctl disable datanode.service  
+    when: inventory_hostname in groups['datanodes']
+    become: true
+      
+
+  - name: Stop disable yarn on datanodes and tasknodes
+    ansible.builtin.command: systemctl disable yarn-nodemanager.service    
+    become: true
+    when: "{{ item }}"
+    with_items:
+      - inventory_hostname in groups['datanodes']
+      - inventory_hostname in groups['tasknodes']    
+    
+  # - name: Stop disable hbase on primary 
+  #   ansible.builtin.command: systemctl disable hbase.service
+  #   when: "'hmaster' in group_names"
+  #   become: true
+
+  # - name: disable service hive on primary
+  #   ansible.builtin.command: systemctl disable hive-server.service 
+  #   when: "'Hive' in group_names"   
+  #   become: true     
+
+  # - name: disable service flink jobmanager on primary
+  #   ansible.builtin.command: systemctl disable flink_cluster.service 
+  #   when: "'jobmanager' in group_names"  
+  #   become: true   
+
+  # - name: disable service presto on primary
+  #   ansible.builtin.command: systemctl disable presto.service 
+  #   when: "'presto-coordinator' in group_names"
+  #   become: true
+
+  # - name: disable service presto on tasknodes
+  #   ansible.builtin.command: systemctl disable presto.service 
+  #   when: "'presto-worker' in group_names"
+  #   become: true

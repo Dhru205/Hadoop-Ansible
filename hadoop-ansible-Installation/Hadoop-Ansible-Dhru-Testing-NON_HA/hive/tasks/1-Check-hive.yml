@@ -1,0 +1,13 @@
+---
+  - name: Get Hive Version
+    command: "{{ hive_check }}"
+    register: hive_version_output
+    ignore_errors: True
+
+  - name: Stop Task Execution if Hive is Present
+    fail:
+      msg: "Hive is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Hive' in group_names"
+      - hive_version_output.rc == 0
+      - "'Hive' in hbase_version_output.stdout"

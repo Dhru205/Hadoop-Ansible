@@ -1,0 +1,33 @@
+---
+# vars file for hbase
+
+## check-hbase.yml
+
+hbase_check: hbase version
+
+## Download-hbase.yml
+hbase_source: hbase-2.4.15-bin.tar.gz
+
+## Config-copy.yml
+destination_path: "{{ home_path }}hbase-2.4.15/conf/"
+hbase_role_template_folder: templates/configs/*
+
+## create-service.yml
+hbase_service_path: templates/service_create/hbase.service
+service_created_destination: /etc/systemd/system/
+
+## Enable-service.yml/Activate-service.yml
+hbase_service: hbase.service
+
+
+#for hbase-site.xml
+hbase_zookeeper_property_dataDir_nha: "{{ home_path }}zookeeper-3.4.6/zk-cluster"
+hbase_zookeeper_property_clientPort_nha: 2181
+hbase_home: "{{ home_path }}hbase-2.4.15/"
+hbase_tmp_dir_nha: "{{ home_path }}hbase-2.4.15/cluster/zk-tmp"
+hbase_master: "{{ groups['namenodes'][0] }}"
+
+
+
+
+

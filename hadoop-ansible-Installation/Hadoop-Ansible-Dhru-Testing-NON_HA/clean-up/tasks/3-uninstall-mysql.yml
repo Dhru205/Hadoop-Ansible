@@ -1,0 +1,16 @@
+---
+## Remove mysql 
+  - name: Stop mysql
+    ansible.builtin.command: systemctl stop mysql
+    become: true
+    when: inventory_hostname in groups['Mysql']
+
+  - name: Remove mysql repo from primary
+    ansible.builtin.command: yum remove mysql* -y
+    become: true
+    when: inventory_hostname in groups['Mysql']
+
+  - name: Remove mysql lib
+    ansible.builtin.command: rm -rf /var/lib/mysql
+    become: true   
+    when: inventory_hostname in groups['Mysql']

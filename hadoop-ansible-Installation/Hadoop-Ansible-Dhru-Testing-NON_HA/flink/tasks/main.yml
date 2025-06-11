@@ -1,0 +1,9 @@
+---
+# tasks file for flink
+
+  - ansible.builtin.include_tasks: 1-Check-flink.yml
+  - ansible.builtin.include_tasks: 2-Download-unzip-bin.yml
+  - ansible.builtin.include_tasks: 3-Config-copy.yml
+  - ansible.builtin.include_tasks: 4-Create-services.yml
+  - ansible.builtin.include_tasks: 5-Enable-services.yml
+  - ansible.builtin.include_tasks: 6-Activate-service.yml  

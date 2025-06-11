@@ -1,0 +1,13 @@
+---
+  - name: Get Zookeeper Version
+    command: echo "status" | nc  localhost 2181 | head -n 1
+    register: zookeeper_version_output
+    ignore_errors: True
+
+  - name: Stop Task Execution if Zookeeper is Present
+    fail:
+      msg: "Zookeeper is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Zookeeper-cluster' in group_names"
+      - zookeeper_version_output.rc == 0
+      - "'Zookeeper' in zookeeper_version_output.stdout"

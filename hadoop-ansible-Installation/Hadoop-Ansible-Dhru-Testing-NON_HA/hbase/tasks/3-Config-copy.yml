@@ -1,0 +1,8 @@
+---
+  - name: Copy files from template folder
+    template:
+      src: "{{ item }}"
+      dest: "{{ destination_path }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ hbase_role_template_folder }}"
+    when: "'Hbase-cluster' in group_names"  

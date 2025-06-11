@@ -1,0 +1,7 @@
+---
+  - name: Enable service resource manager on master
+    ansible.builtin.service:
+      name: "{{ resource_manager }}"
+      enabled: yes
+    when: inventory_hostname in groups['namenodes'][0]
+    become: true

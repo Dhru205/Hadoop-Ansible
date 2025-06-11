@@ -1,0 +1,21 @@
+---
+
+  - name: Creating a datanode_data directory
+    file:
+      path: "{{ dfs_datanode_data_dir }}"
+      state: directory
+    when: "'datanodes' in group_names"
+
+  - name: Copy files from template folder
+    template:
+      src: "{{ item }}"
+      dest: "{{ destination_path }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ hadoop_role_template_folder }}"
+    when: "'Hadoop-cluster' in group_names"   
+         
+  - name: Creating a namenode_data directory on primary host and secondary host
+    file:
+      path: "{{ create_namenode_data_dir }}"
+      state: directory
+    when: "'namenodes' in group_names"

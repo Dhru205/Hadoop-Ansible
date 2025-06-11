@@ -1,0 +1,5 @@
+---
+  - name: disable service resourcemanager
+    ansible.builtin.command: systemctl disable resource-manager.service
+    when: inventory_hostname in groups['namenodes'][0]
+    become: true

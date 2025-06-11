@@ -1,0 +1,49 @@
+---
+  - name: SSH KeyGen command 
+    shell: >
+      ssh-keygen -q -b 2048 -t rsa -N "" -C "creating SSH" -f ~/.ssh/id_rsa
+      creates="~/.ssh/id_rsa"
+    when: inventory_hostname in groups['namenodes'][0] 
+
+  - name: Fetch the keyfile from machine to buffer 
+    fetch:
+      src: "{{ ssh_src }}"
+      dest: "{{ ssh_dst_1 }}"
+      flat: yes
+    when: inventory_hostname in groups['namenodes'][0]
+
+  - name: Copy the key add to authorized_keys using Ansible module
+    tags: "{{ tags_authorized }}"
+    authorized_key:
+      user: "{{ authorized_user }}"
+      state: present
+      key: "{{ lookup('file','{{ssh_dst_1}}')}}"
+
+  - name: SSH KeyGen command 
+    shell: >
+      ssh-keygen -q -b 2048 -t rsa -N "" -C "creating SSH" -f ~/.ssh/id_rsa
+      creates="~/.ssh/id_rsa"
+    when: inventory_hostname in groups['namenodes'][1]
+  
+  - name: Fetch the keyfile from machine to buffer
+    fetch:
+      src: "{{ ssh_src }}"
+      dest: "{{ ssh_dst_2 }}"
+      flat: yes   
+    when: inventory_hostname in groups['namenodes'][1]
+    
+  - name: Copy the key add to authorized_keys using Ansible module
+    tags: "{{ tags_authorized }}"
+    authorized_key:
+      user: "{{ authorized_user }}"
+      state: present
+      key: "{{ lookup('file','{{ssh_dst_2}}')}}"
+
+  - name: copy the config file to .ssh/ hadoop cluster 
+    ansible.builtin.copy:
+      src: "{{ config_path }}"
+      dest: "{{ config_dest }}"  
+    when: "'hadoop-cluster' in group_names"
+
+  - name: Give permission to config file
+    shell: "{{ permission_config }}"

@@ -1,0 +1,161 @@
+# Reload Daemon 
+
+  - name: Reload the daemon 
+    ansible.builtin.command: systemctl daemon-reload
+    become: true
+
+
+##Format hdfs on primary
+
+  - name: Format hdfs only on primary
+    ansible.builtin.command: "{{ namenode_format_primary }}"
+    when: inventory_hostname in groups['namenodes'][0] 
+    register: hdfs_format_primary     
+
+  - debug:
+          var: hdfs_format_primary  
+    when: inventory_hostname in groups['namenodes'][0] 
+
+
+# Start namenode on primary
+
+  - name: Start service namenode on primary
+    ansible.builtin.service:
+      name: "{{ service_namenode }}"
+      state: started
+    when: inventory_hostname in groups['namenodes'][0]
+    become: true
+    register: start_namenode_primary_service   
+  - debug:
+          var: start_namenode_primary_service     
+    when: inventory_hostname in groups['namenodes'][0]         
+
+
+  - name: Check the status of namenode service on primary host 
+    ansible.builtin.command: systemctl status "{{ service_namenode }}"
+    when: inventory_hostname in groups['namenodes'][0] 
+    become: true    
+    register: status_namenode_primary_service    
+  - debug:
+          var: status_namenode_primary_service 
+    when: inventory_hostname in groups['namenodes'][0]         
+
+ #Get JPS
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command_namenode_primary
+  - debug:
+          var: jps_command_namenode_primary
+    when: inventory_hostname in groups['namenodes'][0]      
+
+## Start namenode on secondary
+
+  - name: Start service namenode on secondary
+    ansible.builtin.service:
+      name: "{{ service_secondarynamenode }}"
+      state: started
+    when: inventory_hostname in groups['namenodes'][1]
+    become: true
+    register: start_namenode_secondary_service   
+  - debug:
+          var: start_namenode_secondary_service     
+    when: inventory_hostname in groups['namenodes'][1]         
+
+
+  - name: Check the status of namenode service on secondary 
+    ansible.builtin.command: systemctl status "{{ service_secondarynamenode }}"
+    when: inventory_hostname in groups['namenodes'][1] 
+    become: true    
+    register: status_namenode_secondary_service    
+  - debug:
+          var: status_namenode_secondary_service 
+    when: inventory_hostname in groups['namenodes'][1]         
+
+ #Get JPS
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command_namenode_primary
+  - debug:
+          var: jps_command_namenode_primary
+    when: inventory_hostname in groups['namenodes'][1]
+
+#Start resource manager on primary
+
+  - name: Block execution for resource manager on primary
+    block:
+      - name: Start service resource manager on primary
+        ansible.builtin.service:
+          name: "{{ resource_manager }}"
+          state: started
+        when: inventory_hostname in groups['namenodes'][0]
+        become: true
+        register: start_resourcemanager_primary_service   
+      - debug:
+              var: start_resourcemanager_primary_service
+        when: inventory_hostname in groups['namenodes'][0]  
+
+      - name: Sleep for {{ sleep_time }} seconds and continue with play
+        ansible.builtin.wait_for:
+          timeout: "{{ sleep_time }}"
+
+      - name: Check the status of resource manager service on primary
+        ansible.builtin.command: systemctl status "{{ resource_manager }}"
+        when: inventory_hostname in groups['namenodes'][0] 
+        become: true
+        register: status_resource_manager1_service    
+      - debug:
+              var: status_resource_manager1_service
+        when: inventory_hostname in groups['namenodes'][0] 
+
+# Start service datanode on datanodes
+
+  - name: Start service datanode on host datanodes
+    ansible.builtin.service:
+      name: "{{ datanode_service }}"
+      state: started
+    when: "'datanodes' in group_names"
+    become: true
+
+  - name: Check the status of datanode service on datanodes
+    ansible.builtin.command: systemctl status "{{ datanode_service }}"
+    when: "'datanodes' in group_names"
+    become: true
+ 
+ ##Get JPS
+
+  - name: JPS command
+    ansible.builtin.command: jps
+    when: "'hadoop-cluster' in group_names"
+
+##Start nodemanager service on tasknodes
+
+  - name: Start service nodemanager
+    ansible.builtin.service:
+      name: "{{ yarn_nodemanager }}"
+      state: started
+    when: "'datanodes' in group_names or 'tasknodes' in group_names"
+    become: true
+    register: start_nodemanager_service   
+  - debug:
+          var: start_nodemanager_service
+    when: "{{ item }}"
+    with_items:
+      - inventory_hostname in groups['datanodes']
+      - inventory_hostname in groups['tasknodes']
+
+  - name: Check the status of nodemanager
+    ansible.builtin.command: systemctl status "{{ yarn_nodemanager }}"
+    when: "'datanodes' in group_names or 'tasknodes' in group_names"
+    become: true
+    register: status_nodemanager_service    
+  - debug:
+          var: status_nodemanager_service 
+    when: "{{ item }}"
+    with_items:
+      - inventory_hostname in groups['datanodes']
+      - inventory_hostname in groups['tasknodes']
+      
+  - name: JPS command
+    ansible.builtin.command: jps 

@@ -1,0 +1,44 @@
+---
+#Yarn node list
+
+  - name: Show yarn node list
+    ansible.builtin.command: "{{ node_list }}"
+    delegate_to: "{{ groups['namenodes'][0] }}"
+
+  - name: yarn rmadmin add cluster node labels
+    ansible.builtin.command: "{{ add_cluster_nodelabels }}"
+    delegate_to: "{{ groups['namenodes'][0] }}"
+              
+  - name: yarn cluster node labels
+    ansible.builtin.command: "{{ list_nodelabels }}"
+    delegate_to: "{{ groups['namenodes'][0] }}"
+                                                      
+  - name: Generate shell script using Jinja2 template
+    template:
+      src: "{{ node_label_template_source }}"
+      dest: "{{ node_label_shellscript_dest }}"
+    delegate_to: "{{ groups['namenodes'][0] }}"
+
+  - name: Set executable permissions for the script
+    file:
+      path: "{{ node_label_shellscript_dest }}"
+      mode: "+x"
+    delegate_to: "{{ groups['namenodes'][0] }}"  
+
+  - name: Execute shell script
+    shell: "{{ node_label_shellscript_dest }}"
+    register: script_output
+    delegate_to: "{{ groups['namenodes'][0] }}"
+  
+  - name: Display script output
+    debug:
+      var: script_output.stdout_lines
+    delegate_to: "{{ groups['namenodes'][0] }}"
+    
+ #Get JPS
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command
+  - debug:
+          var: jps_command 

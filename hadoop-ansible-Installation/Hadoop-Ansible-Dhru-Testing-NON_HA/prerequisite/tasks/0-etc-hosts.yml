@@ -1,0 +1,23 @@
+---
+# Automatic
+  - name: Create host file on localhost machine from ansible inventory yml file
+    template:
+      src: etc-hosts-auto.j2
+      dest: "hosts"
+    delegate_to: localhost
+    when: etc_host == "auto"
+
+# Manual
+  - name: Create host file on localhost machine from ansible inventory yml file
+    template:
+      src: etc-hosts-manual.j2
+      dest: "hosts"
+    delegate_to: localhost
+    when: etc_host == "manual"
+
+  - name: Add mappings to /etc/hosts
+    blockinfile:
+      path: "{{ hosts_file_path }}"
+      block: "{{ lookup('file', 'hosts') }}"
+    become: true
+    when: etc_host == "manual" or etc_host == "auto"

@@ -1,0 +1,46 @@
+---
+# vars file for presto
+
+
+## check-presto.yml
+presto_check: jps |grep PrestoServer
+
+## Download-unzip.yml
+presto_source: presto-server-0.278.1.tar.gz
+
+## Conig-copy.yml
+
+presto_role_master_template_folder: templates/presto_master/*
+presto_role_slaves_template_folder: templates/presto_slaves/*
+destination_path: "{{ home_path }}presto-server-0.278.1/etc/"
+presto_dir: "{{ home_path }}presto/data"
+source_catalog_properties: templates/presto_catalog_properties/*
+catalog_dest: "{{ home_path }}presto-server-0.278.1/etc/catalog/"
+catalog_path: "{{ home_path }}presto-server-0.278.1/etc/catalog"
+node_property: "{{ home_path }}presto-server-0.278.1/etc/node.properties"
+etc_path: "{{ home_path }}presto-server-0.278.1/etc"
+
+presto_coordinator: "{{ groups['presto-coordinator'][0] }}"
+
+#For presto master and slaves config.properties
+discovery_uri: "{{ presto_coordinator }}:8080"
+http_server_http_port_primary: 8080
+coordinator_master: true
+coordinator_slave: false
+
+## For properties in presto
+presto_master: "{{ groups['Hive'][0] }}"
+
+## Hive metastore for presto
+hive_metastore_uri: "{{ presto_master }}:9083"
+
+#For hive.properties
+connector_name: hive-hadoop2
+
+## For presto service creation,enabling and starting
+presto_path: templates/presto.service
+service_created_destination: /etc/systemd/system/
+presto_service: presto.service
+
+presto_home: "{{ home_path }}presto-server-0.278.1/"
+hadoop_home: "{{ home_path }}hadoop-2.10.2/"

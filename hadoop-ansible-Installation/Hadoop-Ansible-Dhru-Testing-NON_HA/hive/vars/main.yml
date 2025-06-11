@@ -1,0 +1,28 @@
+---
+
+## Check-hive.yml
+hive_check: hive --version
+
+## Download-hive.yml
+hive_source: apache-hive-2.3.9-bin.tar.gz
+
+## Config-copy.yml
+hive_config_src: templates/hive-site.xml
+hive_config_dest: "{{ home_path }}apache-hive-2.3.9-bin/conf"
+mysql_jar_dest: "{{ home_path }}apache-hive-2.3.9-bin/lib"
+mysql_jar_src: ./hive/templates/mysql-connector-java-8.0.19.jar
+
+## Create-service.yml
+hive_server_path: templates/hive-server.service
+service_created_destination: /etc/systemd/system/
+
+## Enable and activate service  yml
+hive_server: hive-server.service
+
+## Init schema for mysql
+schema_init: schematool -dbType mysql -initSchema
+schema_dir: "{{ home_path }}apache-hive-2.3.9-bin/bin/"
+
+
+hadoop_home: "{{ home_path }}hadoop-2.10.2/"
+hive_home: "{{ home_path }}apache-hive-2.3.9-bin/"

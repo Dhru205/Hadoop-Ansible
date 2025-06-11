@@ -1,0 +1,19 @@
+[Unit]
+Description=Start hbase service
+After=syslog.target network.target remote-fs.target nss-lookup.target network-online.target
+Requires=network-online.target
+
+[Service]
+User={{  user }}
+Group={{  user }}
+Type=forking
+ExecStart={{ hbase_home }}bin/start-hbase.sh
+ExecStop={{ hbase_home }}bin/stop-hbase.sh
+WorkingDirectory={{ hbase_home }}
+Environment=JAVA_HOME={{ java_path }}
+Environment=HBASE_HOME={{ hbase_home }}
+TimeoutStartSec=2min
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

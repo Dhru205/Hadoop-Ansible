@@ -1,0 +1,79 @@
+---
+# Remove all service files 
+
+  # - name: Delete hadoop journal node service
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/hadoop-journalnode.service
+  #   become: true  
+
+
+  - name: Delete hadoop namenode service
+    ansible.builtin.file:
+      state: absent
+      path: /etc/systemd/system/hadoop-namenode.service   
+    become: true  
+
+  - name: Delete hadoop secondarynamenode service
+    ansible.builtin.file:
+      state: absent
+      path: /etc/systemd/system/hadoop-secondarynamenode.service   
+    become: true  
+
+  # - name: Delete zookeeper service
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/zk-server-sh.service
+  #   become: true
+
+
+  - name: Delete resource manager service
+    ansible.builtin.file:
+      state: absent
+      path: /etc/systemd/system/resource-manager.service
+    become: true  
+
+
+  # - name: Delete zkfc service 
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/zkfc.service
+  #   become: true
+
+  - name: Delete datanode service 
+    ansible.builtin.file:
+      state: absent
+      path: /etc/systemd/system/datanode.service 
+    become: true  
+
+
+  - name: Delete yarn nodemanager service 
+    ansible.builtin.file:
+      state: absent
+      path: /etc/systemd/system/yarn-nodemanager.service
+    become: true 
+
+  # - name: Delete hbase service 
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/hbase.service
+  #   become: true  
+
+
+  # - name: Delete hive service 
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/hive-server.service
+  #   become: true  
+
+  # - name: Delete flink service 
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/flink_cluster.service
+  #   become: true  
+
+  # - name: Delete presto service 
+  #   ansible.builtin.file:
+  #     state: absent
+  #     path: /etc/systemd/system/presto.service
+  #   become: true  

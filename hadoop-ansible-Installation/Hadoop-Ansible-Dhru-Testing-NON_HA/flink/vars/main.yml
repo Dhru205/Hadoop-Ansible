@@ -1,0 +1,22 @@
+---
+
+## Vars for flink.yaml
+flink_check: flink --version
+
+
+## Vars for download-unzip.yaml
+flink_source: flink-1.14.4-bin-scala_2.11.tgz
+
+## For config.copy.yaml
+destination_path: "{{ home_path }}flink-1.14.4/conf/"
+flink_role_template_folder: templates/flink_cofgs/*
+
+
+
+## Vars for Service file of flink
+pid_flink_jobmanager_file: "/tmp/flink-{{  user }}-standalonesession.pid"
+flink_cluster_service: flink_cluster.service
+flink_cluster_path: templates/flink_service_create/flink_cluster.service
+service_created_destination: /etc/systemd/system/
+hadoop_home: "{{ home_path }}hadoop-2.10.2/"
+flink_home: "{{ home_path }}flink-1.14.4/"

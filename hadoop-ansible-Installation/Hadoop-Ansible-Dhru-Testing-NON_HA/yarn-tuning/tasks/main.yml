@@ -1,0 +1,9 @@
+---
+# tasks file for yarn-tuning
+
+  - ansible.builtin.include_tasks: 0-Stop-service.yaml
+  - ansible.builtin.include_tasks: 1-Disable-service.yaml
+  - ansible.builtin.include_tasks: 2-Copy-config.yaml
+  - ansible.builtin.include_tasks: 3-Enable-service.yaml
+  - ansible.builtin.include_tasks: 4-Activate-service.yaml
+  - ansible.builtin.include_tasks: 9-Node-label.yml

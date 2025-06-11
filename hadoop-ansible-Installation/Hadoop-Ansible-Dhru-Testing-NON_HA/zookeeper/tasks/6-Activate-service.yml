@@ -1,0 +1,40 @@
+---
+
+  - name: Reload the daemon 
+    ansible.builtin.command: systemctl daemon-reload
+    become: true
+
+#Start zookeeper on all nodes           
+
+  - name: Start service zookeeper across all nodes
+    ansible.builtin.service:
+      name: "{{ zk_server }}"
+      state: started
+    become: true
+    when: "'Zookeeper-cluster' in group_names"
+
+    register: start_zookeeper_service   
+  - debug:
+          var: start_zookeeper_service
+    when: "'Zookeeper-cluster' in group_names"       
+             
+
+  - name: Check the status of zookeeper service across all nodes
+    ansible.builtin.command: systemctl status "{{ zk_server }}"
+    become: true
+    when: "'Hbasecluster' in group_names"
+    # when: status_debug == true
+    register: status_zk_server_service    
+  - debug:
+          var: status_zk_server_service
+    when: "'Zookeeper-cluster' in group_names"      
+          
+
+ #Get JPS
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command_zookeeper
+  - debug:
+          var: jps_command_zookeeper
+         

@@ -1,0 +1,20 @@
+[Unit]
+Description=Start datanode service
+After=syslog.target network.target remote-fs.target nss-lookup.target network-online.target
+Requires=network-online.target
+
+[Service]
+User={{  user }}
+Group={{  user }}
+Type=forking
+ExecStart={{ hadoop_home }}sbin/hadoop-daemon.sh start datanode 
+ExecStop={{ hadoop_home }}sbin/hadoop-daemon.sh stop datanode
+WorkingDirectory={{ hadoop_home }}
+Environment=JAVA_HOME={{ java_path }}
+Environment=HADOOP_HOME={{ hadoop_home }}
+TimeoutStartSec=2min
+Restart=on-failure
+PIDFile={{ pid_datanode_file }}
+
+[Install]
+WantedBy=multi-user.target

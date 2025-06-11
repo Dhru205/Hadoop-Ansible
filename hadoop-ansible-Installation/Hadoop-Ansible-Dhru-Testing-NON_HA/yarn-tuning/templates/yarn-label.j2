@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# This is a ansible generated shell script
+
+# Tasknode label
+{% for host in groups['tasknodes'] %}
+yarn rmadmin -replaceLabelsOnNode "{{ hostvars[host]['ansible_hostname'] }}=TASK"
+{% endfor %}
+# Datanode label
+{% for host in groups['datanodes'] %}
+yarn rmadmin -replaceLabelsOnNode "{{ hostvars[host]['ansible_hostname'] }}=CORE"
+{% endfor %}

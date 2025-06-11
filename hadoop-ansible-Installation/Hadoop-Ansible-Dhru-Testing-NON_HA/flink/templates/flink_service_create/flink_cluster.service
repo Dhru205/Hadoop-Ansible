@@ -1,0 +1,21 @@
+[Unit]
+Description=Apache Flink jobmanager
+Documentation=http://flink.apache.org/
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+[Service]
+Type=forking
+User={{  user }}
+Group={{  user }}
+Environment=JAVA_HOME={{ java_path }}
+ExecStart={{ flink_home }}bin/start-cluster.sh
+ExecStop={{ flink_home }}bin/stop-cluster.sh
+Restart=on-failure
+PIDFile={{ pid_flink_jobmanager_file }}
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+

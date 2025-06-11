@@ -1,0 +1,41 @@
+---
+
+  - name: This command will execute initschema command on primary
+    ansible.builtin.shell:
+      cmd: "{{ schema_init }}"
+      chdir: "{{ schema_dir }}"
+    when:
+    - inventory_hostname in groups['Hive']
+    - enable_mysql_init_schema == true
+    register: initschema
+  - debug:
+          var: initschema
+    when:
+    - inventory_hostname in groups['Hive']
+    - enable_mysql_init_schema == true
+
+  - name: Reload the daemon
+    ansible.builtin.command: systemctl daemon-reload
+    become: true
+
+#Start hive server on primary
+
+  - name: Start hive server service on primary
+    ansible.builtin.service:
+      name: "{{ hive_server }}"
+      state: started
+    when: "'Hive' in group_names"   
+    become: true  
+    register: start_hiveserver_primary_service   
+  - debug:
+          var: start_hiveserver_primary_service
+    when: "'Hive' in group_names"
+
+  - name: Check the status of hiveserver service 
+    ansible.builtin.command: systemctl status "{{ hive_server }}"
+    when: "'Hive' in group_names" 
+    become: true
+    register: status_hiveserver_service    
+  - debug:
+          var: status_hiveserver_service
+    when: "'Hive' in group_names" 

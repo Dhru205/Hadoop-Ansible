@@ -1,0 +1,19 @@
+[Unit]
+Description=Start presto
+After=syslog.target network.target remote-fs.target nss-lookup.target network-online.target
+Requires=network-online.target
+
+[Service]
+User={{  user }}
+Group={{  user }}
+Type=forking
+ExecStart={{ presto_home }}bin/launcher start
+WorkingDirectory={{ presto_home }}
+Environment=JAVA_HOME={{ java_path }}
+Environment=PRESTO_HOME={{ presto_home }}
+Environment=HADOOP_HOME={{ hadoop_home }}
+TimeoutStartSec=2min
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

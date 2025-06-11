@@ -1,0 +1,25 @@
+---
+    # #Enable presto service on coordinator
+  - name: Enable presto service on coordinator
+    ansible.builtin.service:
+      name: "{{ presto_service }}"
+      enabled: yes
+    when: inventory_hostname in groups['presto-coordinator']  
+    become: true
+    register: enable_presto_primary_service   
+  - debug:
+          var: enable_presto_primary_service 
+    when: inventory_hostname in groups['presto-coordinator']  
+
+# # #Enable presto service on worker
+
+  - name: Enable presto service on worker
+    ansible.builtin.service:
+      name: "{{ presto_service }}"
+      enabled: yes
+    when: inventory_hostname in groups['presto-worker'] 
+    become: true
+    register: enable_presto_tasknode_service   
+  - debug:
+          var: enable_presto_tasknode_service 
+    when: inventory_hostname in groups['presto-worker']

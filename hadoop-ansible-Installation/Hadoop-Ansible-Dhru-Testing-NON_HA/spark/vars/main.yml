@@ -1,0 +1,18 @@
+---
+
+## Check spark-version.yml
+spark_version_check: spark-submit --version
+
+# vars file for Download-unzip.yml
+spark_source: spark-3.2.2-bin-hadoop2.7.tgz
+
+## Copy-config.yml
+source_spark_conf: templates/spark-defaults.conf
+dest_spark_conf: "{{ home_path }}spark-3.2.2-bin-hadoop2.7/conf"
+mysql_conn: ./spark/templates/mysql-connector-java-8.0.19.jar
+dest_mysql_jar: "{{ home_path }}spark-3.2.2-bin-hadoop2.7/jars"
+
+#for spark-defaults.conf
+spark_eventLog_dir: "{{ fs_defaultFS_nha }}/spark-logs"
+
+spark_ip: "{{ groups['Spark'][0] }}"

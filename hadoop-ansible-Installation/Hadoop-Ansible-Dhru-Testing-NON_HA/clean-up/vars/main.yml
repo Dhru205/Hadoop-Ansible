@@ -1,0 +1,14 @@
+---
+# vars file for clean-up
+service_journalnode: hadoop-journalnode.service
+service_namenode: hadoop-namenode.service
+zk_server: zk-server-sh.service
+resource_manager: resource-manager.service
+zkfc_failover: zkfc.service
+datanode_service: datanode.service
+yarn_nodemanager: yarn-nodemanager.service
+hbase_service: hbase.service
+hive_server: hive-server.service
+flink_jobmanager_service: flink_jobmanager.service
+flink_taskmanager_service: flink_taskmanager.service
+presto_service: presto.service

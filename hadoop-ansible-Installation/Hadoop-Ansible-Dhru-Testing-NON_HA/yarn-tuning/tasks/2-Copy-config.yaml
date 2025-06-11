@@ -1,0 +1,8 @@
+---
+  - name: Copy files from template folder
+    template:
+      src: "{{ item }}"
+      dest: "{{ destination_path }}{{ item | basename }}"
+    with_fileglob:
+      - "{{ yarb_role_template_folder }}"
+    when: "'Hadoop-cluster' in group_names"

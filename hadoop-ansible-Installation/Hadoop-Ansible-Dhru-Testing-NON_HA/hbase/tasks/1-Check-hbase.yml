@@ -1,0 +1,13 @@
+---
+  - name: Get HBase Version
+    command: "{{ hbase_check }}"
+    register: hbase_version_output
+    ignore_errors: True
+
+  - name: Stop Task Execution if HBase is Present
+    fail:
+      msg: "HBase is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Hbase-cluster' in group_names"
+      - hbase_version_output.rc == 0
+      - "'HBase' in hbase_version_output.stdout"

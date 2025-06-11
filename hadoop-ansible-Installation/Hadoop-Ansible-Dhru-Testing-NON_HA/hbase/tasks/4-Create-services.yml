@@ -1,0 +1,10 @@
+---
+  - name: Create hbase service on primary 
+    template:  
+      src: "{{ hbase_service_path }}"
+      dest: "{{ service_created_destination }}"
+    when: inventory_hostname in groups['hmaster']
+    become: true
+  - debug:
+          msg: hbase service created on {{ ansible_hostname }}
+    when: inventory_hostname in groups['hmaster']

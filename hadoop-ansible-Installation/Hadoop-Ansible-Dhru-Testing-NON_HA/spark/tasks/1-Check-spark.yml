@@ -1,0 +1,14 @@
+---
+  - name: Get Spark Version
+    command: spark-submit --version
+    register: spark_version_output
+    ignore_errors: True
+    when: "'Spark' in group_names"
+
+  - name: Stop Task Execution if Spark is Present
+    fail:
+      msg: "Spark is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Spark' in group_names"
+      - spark_version_output.rc == 0
+      - "'Spark' in spark_version_output.stdout"

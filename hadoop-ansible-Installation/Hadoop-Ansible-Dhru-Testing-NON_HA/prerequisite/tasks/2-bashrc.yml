@@ -1,0 +1,22 @@
+---
+  - name: Insert hadoop components path/home in bashrc
+    ansible.builtin.blockinfile:
+      path: "{{ path_bashrc }}"
+      block: |
+        {{ java_home }}
+        {{ Hadoop_home }}
+        {{ spark_home }}
+        {{ hive_home }}
+        {{ presto_home }}
+        {{ hbase_home }}
+        {{ flink_home }}
+        {{ zookeeper_home }}
+        {{ hadoop_install }}
+        {{ hadoop_mapred }}
+        {{ hadoop_hdfs }}
+        {{ hadoop_yarn }}
+        {{ hadoop_common_lib }}
+        {{ hadoop_conf }}
+        {{ hadoop_yarn_conf }}
+        {{ hadoop_opts }}
+        {{ all_path }}

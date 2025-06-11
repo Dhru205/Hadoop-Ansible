@@ -1,0 +1,18 @@
+---
+  - name: Copy flink tar from s3 bucket to all nodes
+    aws_s3:
+      s3_url: "{{ s3_url }}"
+      bucket: "{{ s3_bucket_name }}"
+      object: "{{ flink_source }}"
+      dest: "{{ home_path }}/{{ flink_source }}"
+      mode: get
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+    when: "'Flink-cluster' in group_names"
+
+  - name: Unzip flink
+    ansible.builtin.unarchive:
+      src: "{{ flink_source }}"
+      dest: "{{ home_path }}"
+      remote_src: yes
+    when: "'Flink-cluster' in group_names"

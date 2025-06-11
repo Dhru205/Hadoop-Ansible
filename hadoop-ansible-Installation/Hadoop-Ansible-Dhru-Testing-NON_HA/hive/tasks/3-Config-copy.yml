@@ -1,0 +1,13 @@
+---
+  - name: copy the hive-site.xml to primary node
+    ansible.builtin.template:
+      src: "{{ hive_config_src }}"
+      dest: "{{ hive_config_dest }}"
+    when: "'Hive' in group_names" 
+
+  - name: copying mysql jar file to primary node
+    become: true 
+    ansible.builtin.copy:
+      src: "{{ mysql_jar_src }}"
+      dest: "{{ mysql_jar_dest }}"
+    when: "'Hive' in group_names"   

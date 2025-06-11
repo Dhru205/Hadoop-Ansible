@@ -1,0 +1,11 @@
+---
+# tasks file for hbase
+   
+  - ansible.builtin.include_tasks: 1-Check-hbase.yml
+  - ansible.builtin.include_tasks: 2-Download-unzip-bin.yml
+  - ansible.builtin.include_tasks: 3-Config-copy.yml
+  - ansible.builtin.include_tasks: 4-Create-services.yml
+  - ansible.builtin.include_tasks: 5-Enable-services.yml
+  - ansible.builtin.include_tasks: 6-Activate-service.yml
+  
+            

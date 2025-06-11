@@ -1,0 +1,82 @@
+---
+# tasks file for mysql
+
+  - name: Check mysql version
+    block:
+      - name: Check if mysql is present or not
+        ansible.builtin.command: "{{ mysql_check }}"
+    rescue:
+      - name: Add mysql repo on primary
+        yum: name="{{ mysql_repo }}"
+        when:
+        - "'Mysql' in group_names"
+        become: true
+
+      - name: Install MySqlServer on primary
+        yum: name="{{ mysql_server }}"
+        when:
+        - "'Mysql' in group_names"
+        become: true
+
+      - name: Start mysqld using sudo
+        shell: "{{ mysqld_start }}"
+        when:
+        - "'Mysql' in group_names"
+        become: true
+
+      - name: Install the py-mysql through pip
+        become: true
+        pip:
+          name: pymysql
+        when:
+        - "'Mysql' in group_names"
+
+      - name: Delete anonymous MySQL server user for {{ ansible_hostname }}
+        mysql_user: login_user=root
+                    login_password=''
+                    check_implicit_admin=yes
+                    user=""
+                    host={{ item }}
+                    state="absent"
+        with_items:
+        - ""
+        - "{{ ansible_hostname }}"
+        - localhost
+        when:
+        - "'Mysql' in group_names"
+
+      - name: Change root user password on first run
+        mysql_user: login_user=root
+                    login_password="{{ mysql_pass }}"
+                    check_implicit_admin=yes
+                    name="{{ mysql_user }}"
+                    password={{ mysql_pass }}
+                    priv=*.*:ALL,GRANT
+                    host={{ item }}
+        with_items:
+          - "{{ ansible_nodename }}"
+          - 127.0.0.1
+          - ::1
+          - localhost
+        when:
+        - "'Mysql' in group_names"
+
+
+      - name: Create MySQL user
+        mysql_user:
+          name: "{{ mysql_user_hive }}"
+          password: "{{ mysql_pass_hive }}"
+          login_user: "{{ mysql_user }}"
+          login_password: "{{ mysql_pass }}"
+        when:
+        - "'Mysql' in group_names"
+
+      - name: Grant permission to the user created
+        command: mysql -u {{ mysql_user }} -p{{ mysql_pass }} -e "Grant All Privileges ON *.* to '{{ mysql_user_hive }}'@'%' Identified By '{{ mysql_pass_hive }}';"
+        when:
+        - "'Mysql' in group_names"
+
+      # - name: Flush privileges
+      #   command: mysql -u {{ mysql_user }} -p{{ mysql_pass }} -e "FLUSH PRIVILEGES;"
+      #   when:
+      #   - "'Mysql' in group_names"

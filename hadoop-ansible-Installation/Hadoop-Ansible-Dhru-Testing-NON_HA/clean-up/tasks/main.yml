@@ -1,0 +1,8 @@
+---
+# tasks file for clean-up
+  - ansible.builtin.include_tasks: 0-stop-services.yml
+  - ansible.builtin.include_tasks: 1-disable-services.yml
+  - ansible.builtin.include_tasks: 2-delete-services.yml
+  - ansible.builtin.include_tasks: 3-uninstall-mysql.yml
+  - ansible.builtin.include_tasks: 4-remove-binary-folders.yml
+

@@ -1,0 +1,65 @@
+---
+
+  - name: Reload the daemon 
+    ansible.builtin.command: systemctl daemon-reload
+    become: true
+
+## Start presto on coordinator
+
+  - name: Start presto service on coordinator
+    ansible.builtin.service:
+      name: "{{ presto_service }}"
+      state: started
+    when: inventory_hostname in groups['presto-coordinator']
+    become: true  
+    register: start_presto_primary_service   
+  - debug:
+          var: start_presto_primary_service
+    when: inventory_hostname in groups['presto-coordinator']
+
+  - name: Check the status of presto service on coordinator
+    ansible.builtin.command: systemctl status "{{ presto_service }}"
+    when: inventory_hostname in groups['presto-coordinator']
+    become: true
+    register: status_presto_primary_service    
+  - debug:
+          var: status_presto_primary_service 
+    when: inventory_hostname in groups['presto-coordinator']         
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command_presto_primary
+  - debug:
+          var: jps_command_presto_primary 
+    when: inventory_hostname in groups['Presto-cluster']
+
+
+#Start presto on workers
+
+  - name: Start presto service on workers
+    ansible.builtin.service:
+      name: "{{ presto_service }}"
+      state: started
+    when: inventory_hostname in groups['presto-worker']
+    become: true  
+    register: start_presto_primary_service   
+  - debug:
+          var: start_presto_primary_service
+    when: inventory_hostname in groups['presto-worker']        
+
+  - name: Check the status of presto service on workers
+    ansible.builtin.command: systemctl status "{{ presto_service }}"
+    when: inventory_hostname in groups['presto-worker']
+    become: true
+    register: status_presto_tasknode_service    
+  - debug:
+          var: status_presto_tasknode1_service
+    when: inventory_hostname in groups['presto-worker']    
+
+  - name: JPS command
+    ansible.builtin.command: jps 
+    register: jps_command_presto_tasknode
+  - debug:
+          var: jps_command_presto_tasknode
+    when: inventory_hostname in groups['presto-worker']
+

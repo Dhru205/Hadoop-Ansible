@@ -1,0 +1,23 @@
+---
+    # Presto services        
+  - name: Create Presto service on coordinator
+    template:  
+      src: "{{ presto_path }}"
+      dest: "{{ service_created_destination }}"
+    when: inventory_hostname in groups['presto-coordinator']  
+    become: true
+  - debug:
+          msg: presto service created on {{ inventory_hostname }}
+    when: inventory_hostname in groups['presto-coordinator']    
+
+  - name: Create Presto service on workers
+    template:  
+      src: "{{ presto_path }}"
+      dest: "{{ service_created_destination }}"
+    when: inventory_hostname in groups['presto-worker']
+    become: true
+  - debug:
+          msg: presto service created on {{ inventory_hostname }}
+    when: inventory_hostname in groups['presto-worker']    
+
+            

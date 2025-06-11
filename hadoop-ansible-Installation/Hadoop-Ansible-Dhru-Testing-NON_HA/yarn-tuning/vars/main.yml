@@ -1,0 +1,39 @@
+---
+# vars file for yarn-tuning
+
+destination_path: "{{ home_path }}hadoop-2.10.2/etc/hadoop/"
+
+yarb_role_template_folder: templates/configs/*
+
+resource_manager: resource-manager.service
+
+
+##Mapred-site.xml
+
+yarn_app_mapreduce_am_resource_mb: 2048
+mapreduce_map_memory_mb: 1024
+mapreduce_reduce_memory_mb: 2048
+mapreduce_task_io_sort_mb: 512
+
+##yarn
+yarn_resourcemanager_hostname_nha: "{{ primary }}"
+yarn_nodemanager_aux_services_spark_shuffle_class_nha: $SPARK_HOME/yarn/spark-3.0.3-yarn-shuffle.jar
+yarn_resourcemanager_resource_tracker_address_nha: "{{ primary }}:8025"
+yarn_resourcemanager_scheduler_address_nha: "{{ primary }}:8030"
+yarn_resourcemanager_address_nha: "{{ primary }}:8040"
+yarn_node_labels_fs_store_root_dir_nha: "hdfs://{{ primary }}:9000/user/node-labels/"
+
+yarn_nodemanager_resource_memory_mb: 16032
+yarn_scheduler_maximum_allocation_mb: 8192
+yarn_scheduler_minimum_allocation_mb: 2048
+yarn_scheduler_increment_allocation_mb: 1024
+
+##mapred-site.xml
+mapreduce_application_classpath_nha: /etc/hadoop/hadoop-2.10.2
+
+## vars for Node-lables.yaml
+node_list: yarn node --list
+add_cluster_nodelabels: yarn rmadmin -addToClusterNodeLabels "CORE,TASK"
+list_nodelabels: yarn cluster --list-node-labels
+node_label_shellscript_dest: "{{ home_path }}generated_script.sh"
+node_label_template_source: templates/yarn-label.j2

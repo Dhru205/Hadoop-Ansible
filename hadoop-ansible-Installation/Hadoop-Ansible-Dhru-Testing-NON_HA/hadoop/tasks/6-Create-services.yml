@@ -1,0 +1,74 @@
+---
+#Journalnode Service across all nodes
+
+
+# Namenode Service on master
+
+  - name: Create namenode service on master
+    template:  
+      src: "{{ namenode_service_path }}"
+      dest: "{{ service_created_destination }}"
+    when: inventory_hostname in groups['namenodes'][0] 
+    become: true
+
+  - debug:
+          msg: Namenode service created on {{ ansible_hostname }}
+    when: inventory_hostname in groups['namenodes'][0] 
+
+## Namenode service on secondary
+
+  - name: Create secondarynamenode service on secondary master
+    template:  
+      src: "{{ secondarynamenode_service_path }}"
+      dest: "{{ service_created_destination }}"
+    when: inventory_hostname in groups['namenodes'][1] 
+    become: true
+
+  - debug:
+          msg: Namenode service created on {{ ansible_hostname }}
+    when: inventory_hostname in groups['namenodes'][1]
+
+# Resourcemanager service on master
+  - name: Create resourcemanager service on primary
+    template:  
+      src: "{{ resource_manager_service_path }}"
+      dest: "{{ service_created_destination }}"
+    when: inventory_hostname in groups['namenodes'][0] 
+    become: true
+
+  - debug:
+          msg: Resource-manager service created on {{ ansible_hostname }}
+    when: inventory_hostname in groups['namenodes'][0] 
+            
+# Datanode service  on datanodes
+
+  - name: Create datanode service on datanodes
+    template:  
+      src: "{{ datanode_service_path }}"
+      dest: "{{ service_created_destination }}"
+    when: "'datanodes' in group_names"
+    become: true
+
+  - debug:
+          msg: Datanode service created on {{ ansible_hostname }}
+    when: "'datanodes' in group_names" 
+
+# Yarn nodemanager services          
+
+  - name: Create nodemanager on tasknodes and datanodes
+    template:  
+      src: "{{ nodemanager_service_path }}"
+      dest: "{{ service_created_destination }}"
+    when: "{{ item }}"
+    with_items:
+      - inventory_hostname in groups['datanodes']
+      - inventory_hostname in groups['tasknodes']      
+    become: true
+
+  - debug:
+          msg: Yarn nodemanager service created on {{ ansible_hostname }}                                               
+    when: "{{ item }}"
+    with_items:
+      - inventory_hostname in groups['datanodes']
+      - inventory_hostname in groups['tasknodes']  
+    

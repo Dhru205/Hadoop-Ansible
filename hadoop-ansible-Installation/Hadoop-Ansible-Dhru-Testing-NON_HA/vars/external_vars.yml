@@ -1,0 +1,47 @@
+
+## For hbase-site.xml
+zookeeper_group: "{{ groups['Hbase-cluster'] }}"
+hbase_zookeeper_quorum_nha: "{% for host in zookeeper_group %}{{ hostvars[host]['ansible_hostname'] }}:2181{% if not loop.last %},{% endif %}{% endfor %}"
+
+## Presto env
+node_environment: production
+
+## Pre-requisite task
+etc_host : auto
+
+##s3 bucket creds
+aws_access_key: bcc981876d28f9c9da9a4582ba8a9457
+aws_secret_key: A9themAwzNmpOVdWvDNU211jnhDLkIrPcwuI9akp
+s3_url: https://nha2dels3texpleicstest.ipstorage.tatacommunications.com
+s3_bucket_name: hadoop
+
+
+## For sparks-default.conf
+fs_defaultFS_nha: "hdfs://{{ primary }}:9000"
+
+## For properties in hadoop
+primary: "{{ groups['namenodes'][0] }}"
+secondary: "{{ groups['namenodes'][1] }}"
+
+
+## home paths
+home_path: /home/nhadmin/
+java_path: /usr
+sleep_time: 10
+user: nhadmin
+
+## Mysql creds
+mysql_user: root
+mysql_pass: imply
+mysql_user_hive: kunal
+mysql_pass_hive: kunal@123
+mysql_endpoint: 100.96.20.169
+mysql_port: 3306
+enable_mysql_init_schema: true
+
+## For mysql role
+hive_endpoint: "{{ groups['Hive'][0] }}"
+
+## For flink role
+flink_master: "{{ groups['jobmanager'][0] }}"
+

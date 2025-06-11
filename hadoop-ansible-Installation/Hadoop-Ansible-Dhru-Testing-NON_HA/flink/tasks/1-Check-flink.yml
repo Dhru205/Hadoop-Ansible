@@ -1,0 +1,13 @@
+---
+  - name: Get Flink Version
+    command: "{{ flink_check }}"
+    register: flink_version_output
+    ignore_errors: True
+
+  - name: Stop Task Execution if Flink is Present
+    fail:
+      msg: "Flink is already installed on the {{ ansible_hostname }} hosts. Stopping task execution."
+    when:
+      - "'Flink-cluster' in group_names"
+      - flink_version_output.rc == 0
+      - "'Flink' in hadoop_version_output.stdout"

@@ -1,0 +1,13 @@
+---
+# Zookeeper service  across all nodes         
+
+  - name: Create zookeeper service across all nodes
+    template:  
+      src: "{{ zookeeper_service_path }}"
+      dest: "{{ service_created_destination }}"
+    become: true  
+    when: "'Zookeeper-cluster' in group_names"
+    
+  - debug:
+          msg: Zookeeper service created on {{ inventory_hostname }}
+    when: "'Zookeeper-cluster' in group_names"      
